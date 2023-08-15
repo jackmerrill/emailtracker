@@ -7,6 +7,7 @@ import (
 	"image"
 	"image/png"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/jackmerrill/emailtracker/database"
@@ -88,6 +89,18 @@ func main() {
 	})
 
 	http.HandleFunc("/panel", func(w http.ResponseWriter, r *http.Request) {
+		// Request username and password from user (use env vars)
+		// If correct, show the panel
+
+		username, password, ok := r.BasicAuth()
+
+		if !ok || username != os.Getenv("AUTH_USER") || password != os.Getenv("AUTH_PASS") {
+			w.Header().Set("WWW-Authenticate", `Basic realm="Restricted"`)
+			w.WriteHeader(http.StatusUnauthorized)
+			fmt.Fprintf(w, "Unauthorized")
+			return
+		}
+
 		data := map[string]TrackingData{}
 		err := db.GetAll(&data)
 
