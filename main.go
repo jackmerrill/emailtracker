@@ -128,9 +128,9 @@ func main() {
 		json.NewEncoder(w).Encode(returnedData)
 	})
 
-	fmt.Println("Listening on port 8089")
+	fmt.Println("Listening on port 8080")
 
-	err = http.ListenAndServe(":8089", nil)
+	err = http.ListenAndServe(":8080", nil)
 
 	if err != nil {
 		panic(err)
