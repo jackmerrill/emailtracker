@@ -27,6 +27,10 @@ WORKDIR /app
 # Copy the binary from the builder stage to the current working directory inside the container
 COPY --from=builder /app/main .
 
+# Environment variables
+ENV AUTH_USER admin
+ENV AUTH_PASSWORD admin
+
 # Volume for the database (db.json)
 VOLUME ["/app/db.json"]
 
