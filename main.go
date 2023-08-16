@@ -20,19 +20,19 @@ type TrackingData struct {
 }
 
 type EncodedData struct {
-	To      string    `json:"to"`
-	From    string    `json:"from"`
-	Subject string    `json:"subject"`
-	Date    time.Time `json:"date"`
+	To      string    `json:"to,omitempty"`
+	From    string    `json:"from,omitempty"`
+	Subject string    `json:"subject,omitempty"`
+	Date    time.Time `json:"date,omitempty"`
 }
 
 type ReturnedData struct {
 	Tracking    TrackingData `json:"tracking"`
-	DecodedData EncodedData  `json:"decoded_data"`
+	DecodedData EncodedData  `json:"decoded_data,omitempty"`
 }
 
 func main() {
-	db, err := database.NewDatabase("db.json")
+	db, err := database.NewDatabase("db/db.json")
 
 	if err != nil {
 		panic(err)
@@ -70,6 +70,14 @@ func main() {
 
 	// Generate a token for the email
 	http.HandleFunc("/t", func(w http.ResponseWriter, r *http.Request) {
+		// preflight request
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		// w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		if r.Method == "OPTIONS" {
+			w.Write([]byte("OK"))
+			return
+		}
+
 		data := EncodedData{
 			To:      r.URL.Query().Get("to"),
 			From:    r.URL.Query().Get("from"),
@@ -131,9 +139,9 @@ func main() {
 			if err != nil {
 				fmt.Println("not json, skipping")
 				continue
+			} else {
+				returnedData[len(returnedData)-1].DecodedData = decodedData
 			}
-
-			returnedData[len(returnedData)-1].DecodedData = decodedData
 		}
 
 		w.Header().Set("Content-Type", "application/json")

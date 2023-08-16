@@ -12,7 +12,8 @@
       "program": "main.go",
       "env": {
         "AUTH_USER": "test",
-        "AUTH_PASS": "test"
+        "AUTH_PASS": "test",
+        "BASE_URL": "http://localhost:8080"
       }
     }
   ]
