@@ -6,7 +6,7 @@
   "description": "Adds a tracking image to the end of the message body",
   "browser_specific_settings": {
     "gecko": {
-      "id": "composebody@sample.extensions.thunderbird.net",
+      "id": "trackingimage@jackmerrill.com",
       "strict_min_version": "110.0a1"
     }
   },
